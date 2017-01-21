@@ -25,9 +25,8 @@ var split = {
     var spriteRender1 = screen1.add.sprite(sprite.x, sprite.y, texture);
     var spriteRender2 = screen2.add.sprite(sprite.x, sprite.y, texture);
     sprite.renderChildren = [spriteRender1, spriteRender2];
-    spriteRender1.parent = sprite;
-    spriteRender2.parent = sprite;
-    console.log(sprite);
+    spriteRender1.parentSprite = sprite;
+    spriteRender2.parentSprite = sprite;
 
     if(group)
     {
@@ -50,6 +49,7 @@ var split = {
     var group = game.add.group();
     var renderGroup1 = screen1.add.group();
     var renderGroup2 = screen2.add.group();
+    console.log(screen1);
 
     group.renderChildren = [renderGroup1, renderGroup2];
 
