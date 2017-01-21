@@ -18,7 +18,6 @@ function gameCreate() {
   game.playerGroup = split.makeGroup();
 
   game.player = new Player(100, 100, 'player');
-  game.physics.enable(game.player, Phaser.Physics.ARCADE);
 
 
 }

@@ -4,6 +4,8 @@ function Player(x, y, image) {
   game.playerGroup.add(this);
   split.customSpriteChildren(this, image, game.playerGroup);
 
+  game.physics.enable(this, Phaser.Physics.ARCADE);
+
 }
 Player.prototype = Object.create(Phaser.Sprite.prototype);
 
@@ -14,6 +16,7 @@ Player.prototype.update = function() {
   {
       this.body.velocity.x = game.pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X)*10;
       console.log('move');
+      console.log(this.body.x);
   }
   else if (game.pad1.isDown(Phaser.Gamepad.XBOX360_DPAD_RIGHT) || game.pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) > 0.1)
   {

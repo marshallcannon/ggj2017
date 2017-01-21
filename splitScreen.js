@@ -27,6 +27,7 @@ var split = {
     sprite.renderChildren = [spriteRender1, spriteRender2];
     spriteRender1.parent = sprite;
     spriteRender2.parent = sprite;
+    console.log(sprite);
 
     if(group)
     {
