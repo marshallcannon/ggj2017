@@ -38,8 +38,10 @@ var split = {
 
   destroySprite: function(sprite) {
 
-    sprite.renderChildren[0].destroy();
-    sprite.renderChildren[1].destroy();
+    if(sprite.renderChildren[0])
+      sprite.renderChildren[0].destroy();
+    if(sprite.renderChildren[1])
+      sprite.renderChildren[1].destroy();
     sprite.destroy();
 
   },
@@ -61,6 +63,40 @@ var split = {
     sprite.tint = tint;
     sprite.renderChildren[0].tint = tint;
     sprite.renderChildren[1].tint = tint;
+
+  },
+
+  centerAnchor: function(sprite) {
+
+    sprite.anchor.setTo(0.5, 0.5);
+    sprite.renderChildren[0].anchor.setTo(0.5, 0.5);
+    sprite.renderChildren[1].anchor.setTo(0.5, 0.5);
+
+  },
+
+  addAnimation: function(sprite, name, frames, speed, looping) {
+
+    var toReturn = sprite.animations.add(name, frames, speed, looping);
+    sprite.renderChildren[0].animations.add(name, frames, speed, looping);
+    sprite.renderChildren[1].animations.add(name, frames, speed, looping);
+
+    return toReturn;
+
+  },
+
+  playAnimation: function(sprite, animation) {
+
+    sprite.animations.play(animation);
+    sprite.renderChildren[0].animations.play(animation);
+    sprite.renderChildren[1].animations.play(animation);
+
+  },
+
+  setFrame: function(sprite, frame) {
+
+    sprite.frame = frame;
+    sprite.renderChildren[0].frame = frame;
+    sprite.renderChildren[1].frame = frame;
 
   }
 

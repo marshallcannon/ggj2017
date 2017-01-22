@@ -1,13 +1,21 @@
 function loadAssets() {
 
-  this.load.spritesheet('player1', 'assets/images/SpaceMan_00_RunAnim.png', 64, 64);
-  this.load.spritesheet('player2', 'assets/images/SpaceMan_01_RunAnim.png', 64, 64);
+  this.load.spritesheet('player1', 'assets/images/AnimSpaceManRun_00.png', 64, 64);
+  this.load.spritesheet('player2', 'assets/images/AnimSpaceManRun_01.png', 64, 64);
 
-  this.load.spritesheet('bg', 'assets/images/BG.png', 960, 540);
+  this.load.spritesheet('bg', 'assets/images/BGSheet.png', 540, 540);
 
   this.load.image('bullet', 'assets/images/bullet.png');
 
   this.load.image('enemy', 'assets/images/enemy.png');
+
+  this.load.image('gas', 'assets/images/gas.png');
+
+  this.load.spritesheet('topDoor', 'assets/images/topDoor.png', 128, 128);
+  this.load.spritesheet('sideDoor', 'assets/images/sideDoor.png', 128, 128);
+
+  //Load Audio
+  this.load.audio('doorSound', 'assets/audio/door.ogg');
 
 }
 

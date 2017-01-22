@@ -5,7 +5,7 @@ function gamePreload() {
 function gameCreate() {
 
   //Room width and height
-  game.roomWidth = 960;
+  game.roomWidth = 540;
   game.roomHeight = 540;
 
   //Phaser Systems
@@ -17,12 +17,21 @@ function gameCreate() {
 
   //Groups
   game.backgroundGroup = split.makeGroup();
+  game.boundingBoxGroup = split.makeGroup();
   game.doorGroup = split.makeGroup();
   game.enemyGroup = split.makeGroup();
   game.playerGroup = split.makeGroup();
+  game.pickupGroup = split.makeGroup();
   game.bulletGroup = split.makeGroup();
+  game.progressBarGroup = split.makeGroup();
+
+  //Create Sounds
+  game.sound = {};
+  game.sound.door = game.add.audio('doorSound');
 
   //Create Level
+  game.levelWidth = 0;
+  game.levelHeight = 0;
   game.roomList = lvlGen.generateLevel();
   console.log(game.roomList);
 
@@ -37,19 +46,28 @@ function gameCreate() {
   //Players
   game.player1 = new Player(game.startX*game.roomWidth+(game.roomWidth/2) - 100, game.startY*game.roomHeight+(game.roomHeight/2), 'player1', game.pad1);
   game.player2 = new Player(game.startX*game.roomWidth+(game.roomWidth/2) + 100, game.startY*game.roomHeight+(game.roomHeight/2), 'player2', game.pad2);
-  setBounds(960*4, 540*4);
+  setBounds(game.levelWidth*960, game.levelHeight*540);
   startCameras(game.player1, game.player2);
 
   //Enemy
-  new Enemy(600, 250, 'enemy', 50, 100, 5, 300);
+  new Enemy(1200, 250, 'enemy', 50, 100, 5, 300);
 
-
+  //Gas
+  new Gas(game.player1.x+15, game.player1.y+80);
+  new Gas(game.player1.x+30, game.player1.y+120);
+  new Gas(game.player1.x, game.player1.y+130);
 
 }
 
 function gameUpdate() {
 
+  game.physics.arcade.collide(game.player1, game.boundingBoxGroup);
+  game.physics.arcade.collide(game.player2, game.boundingBoxGroup);
+  game.physics.arcade.collide(game.player1, game.doorGroup);
+  game.physics.arcade.collide(game.player2, game.doorGroup);
   game.physics.arcade.overlap(game.bulletGroup, game.enemyGroup, bulletHitEnemy);
+  game.physics.arcade.overlap(game.bulletGroup, game.boundingBoxGroup, bulletHitWall);
+  game.physics.arcade.overlap(game.bulletGroup, game.pickupGroup, bulletHitCollectible);
 
 }
 
@@ -68,30 +86,5 @@ function startCameras(p1, p2) {
 
   screen2.playerSprite = p2.renderChildren[1];
   screen2.camera.follow(screen2.playerSprite);
-
-}
-
-function bulletHitEnemy(bullet, enemy) {
-
-  //Damage
-  enemy.hp -= bullet.damage;
-
-  //Enemy flash
-  enemy.flash();
-  game.time.events.add(20, enemy.stopFlash, enemy);
-
-  //Knockback
-  var xDiff = bullet.x - enemy.x;
-  var yDiff = bullet.y - enemy.y;
-  if(bullet.x - enemy.x <= 0)
-    enemy.body.velocity.x += bullet.knockback*Math.abs(xDiff/enemy.width);
-  else
-    enemy.body.velocity.x -= bullet.knockback*Math.abs(xDiff/enemy.width);
-  if(bullet.y - enemy.y <= 0)
-    enemy.body.velocity.y += bullet.knockback*Math.abs(yDiff/enemy.height);
-  else
-    enemy.body.velocity.y -= bullet.knockback*Math.abs(yDiff/enemy.height);
-
-  split.destroySprite(bullet);
 
 }

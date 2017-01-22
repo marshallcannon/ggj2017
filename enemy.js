@@ -8,9 +8,7 @@ function Enemy(x, y, image, health, topSpeed, acceleration, range) {
   this.acc = acceleration;
   this.range = range;
 
-  this.anchor.setTo(0.5, 0.5);
-  this.renderChildren[0].anchor.setTo(0.5, 0.5);
-  this.renderChildren[1].anchor.setTo(0.5, 0.5);
+  split.centerAnchor(this);
 
   game.physics.enable(this, Phaser.Physics.ARCADE);
 
