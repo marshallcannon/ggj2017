@@ -4,13 +4,15 @@ function gamePreloadRender() {
 
 function gameCreateRender() {
 
+  this.stage.backgroundColor = 0x0e0929;
+
   if(this.game.screenNumber === 1)
   {
-    this.stage.backgroundColor = 0xFF0000;
+
   }
   else if(this.game.screenNumber === 2)
   {
-    this.stage.backgroundColor = 0x0000FF;
+    
   }
 
 }

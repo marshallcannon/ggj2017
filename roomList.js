@@ -24,8 +24,8 @@ var roomSpawns = {
   diff2: [
 
     function(room) {
-      spawn.resource(room, 100, 100, 'gas', 50);
-      spawn.resource(room, 200, 200, 'gas', 50, 3);
+      spawn.resource(room, 100, 300, 'gas', 50);
+      spawn.resource(room, 200, 300, 'gas', 50, 3);
       spawn.enemy(room, 200, 400, 'ghost', 1);
     },
     function(room) {
@@ -58,7 +58,6 @@ var spawn = {
     if(typeof size === 'undefined')
       size = 1;
 
-    console.log(baseX, baseY);
     if(type === 'gas')
       room.objects.push(new Gas(baseX+x, baseY+y, value, size));
 

@@ -114,6 +114,44 @@ var split = {
     sprite.renderChildren[0].alpha = amount;
     sprite.renderChildren[1].alpha = amount;
 
+  },
+
+  makeText: function(x, y, text, size, group) {
+
+    if(typeof size === 'undefined') {size = 24;}
+
+    var mainText = game.add.bitmapText(x, y, 'font', text, size);
+    var s1 = screen1.add.bitmapText(x, y, 'font', text, size);
+    var s2 = screen2.add.bitmapText(x, y, 'font', text, size);
+    mainText.renderChildren = [s1, s2];
+    s1.parentSprite = mainText;
+    s2.parentSprite = mainText;
+
+    if(group)
+    {
+      group.add(mainText);
+      group.renderChildren[0].add(s1);
+      group.renderChildren[1].add(s2);
+    }
+
+    return mainText;
+
+  },
+
+  updateText: function(text, newString) {
+
+    text.text = newString;
+    text.renderChildren[0].text = newString;
+    text.renderChildren[1].text = newString;
+
+  },
+
+  fixToCamera: function(object) {
+
+    object.fixedToCamera = true;
+    object.renderChildren[0].fixedToCamera = true;
+    object.renderChildren[1].fixedToCamera = true;
+
   }
 
 };

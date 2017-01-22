@@ -19,13 +19,23 @@ function loadAssets() {
   //Load Audio
   this.load.audio('doorSound', 'assets/audio/door.ogg');
 
+  //Load Font
+  this.load.bitmapFont('font', 'assets/font/font.png', 'assets/font/font.fnt');
+
+  //Pixel Scaling
+  this.game.renderer.renderSession.roundPixels = true;
+  Phaser.Canvas.setImageRenderingCrisp(this.game.canvas);
+  game.stage.smoothed = false;
+
 }
 
 function loadCreate() {
 
   this.game.screenNumber = 0;
 
+  this.game.state.add('menu', menuState);
   this.game.state.add('game', gameState);
+  this.game.state.add('gameOver', gameOverState);
 
   this.ready = false;
 
@@ -35,7 +45,9 @@ function screen1Create() {
 
   this.game.screenNumber = 1;
 
+  this.game.state.add('menu', menuStateRender1);
   this.game.state.add('game', gameStateRender1);
+  this.game.state.add('gameOver', gameOverStateRender1);
 
   this.ready = false;
 
@@ -45,7 +57,9 @@ function screen2Create() {
 
   this.game.screenNumber = 2;
 
+  this.game.state.add('menu', menuStateRender2);
   this.game.state.add('game', gameStateRender2);
+  this.game.state.add('gameOver', gameOverStateRender2);
 
   this.ready = false;
 
@@ -66,11 +80,11 @@ function loadUpdate() {
     {
       if(screensStarted === 2)
       {
-        this.game.state.start('game');
+        this.game.state.start('menu');
       }
     }
     else {
-      this.game.state.start('game');
+      this.game.state.start('menu');
       screensStarted++;
     }
 

@@ -3,7 +3,10 @@ function Collectible(x, y, image) {
   Phaser.Sprite.call(this, game, x, y, image);
   game.pickupGroup.add(this);
   split.customSpriteChildren(this, image, game.pickupGroup);
-  split.centerAnchor(this);
+
+  this.anchor.setTo(0.5, 1);
+  this.renderChildren[0].anchor.setTo(0.5, 1);
+  this.renderChildren[1].anchor.setTo(0.5, 1);
 
   this.timeToCollect = 15;
   this.progress = 0;

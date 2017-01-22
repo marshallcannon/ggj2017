@@ -57,3 +57,9 @@ function bulletHitCollectible(bullet, col) {
   bullet.kill();
 
 }
+
+function bulletHitDoor(bullet, door) {
+
+  bullet.kill();
+
+}
