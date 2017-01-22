@@ -22,11 +22,13 @@ function menuCreate() {
   game.countDown = game.countDownMax;
   game.gameOver = false;
   game.level = 0;
+  game.fuelGoal = 20;
 
 }
 
 function menuCreateRender() {
 
+  screen1.camera.onFadeComplete.removeAll();
   screen1.camera.onFadeComplete.add(startGame, this);
 
 }
@@ -53,7 +55,9 @@ function menuUpdate() {
 
   //Start game if both screens are ready
   if(screen1.state.current === 'game' && screen2.state.current === 'game')
+  {
     game.state.start('game');
+  }
 
 }
 
@@ -63,6 +67,7 @@ function menuUpdateRender() {
 
 function startGame() {
 
+  console.log('start game');
   screen1.state.start('game');
   screen2.state.start('game');
 

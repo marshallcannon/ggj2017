@@ -152,6 +152,33 @@ var split = {
     object.renderChildren[0].fixedToCamera = true;
     object.renderChildren[1].fixedToCamera = true;
 
+  },
+
+  makeFloatingText: function(x, y, string, tint) {
+
+    if(typeof tint === 'undefined') {tint = 0xFFFFFF;}
+
+    var text = game.add.bitmapText(x, y, 'font', string, 12);
+    game.physics.enable(text, Phaser.Physics.ARCADE);
+    text.body.velocity.setTo(0, -50);
+    text.tint = tint;
+    game.add.tween(text).to({alpha:0}, 500, 'Linear', true);
+    game.time.events.add(500, function(){text.destroy();}, this);
+
+    var text2 = screen1.add.bitmapText(x, y, 'font', string, 12);
+    screen1.physics.enable(text2, Phaser.Physics.ARCADE);
+    text2.body.velocity.setTo(0, -50);
+    text2.tint = tint;
+    screen1.add.tween(text2).to({alpha:0}, 500, 'Linear', true);
+    screen1.time.events.add(500, function(){text2.destroy();}, this);
+
+    var text3 = screen2.add.bitmapText(x, y, 'font', string, 12);
+    screen2.physics.enable(text3, Phaser.Physics.ARCADE);
+    text3.body.velocity.setTo(0, -50);
+    text3.tint = tint;
+    screen2.add.tween(text3).to({alpha:0}, 500, 'Linear', true);
+    screen2.time.events.add(500, function(){text3.destroy();}, this);
+
   }
 
 };

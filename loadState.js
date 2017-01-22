@@ -16,6 +16,9 @@ function loadAssets() {
   this.load.spritesheet('topDoor', 'assets/images/topDoor.png', 128, 128);
   this.load.spritesheet('sideDoor', 'assets/images/sideDoor.png', 128, 128);
 
+  this.load.image('failLeft', 'assets/images/FailLeft.png');
+  this.load.image('failRight', 'assets/images/FailRight.png');
+
   //Load Audio
   this.load.audio('doorSound', 'assets/audio/door.ogg');
 

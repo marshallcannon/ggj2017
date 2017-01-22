@@ -31,7 +31,7 @@ function gameCreate() {
   game.levelWidth = 0;
   game.levelHeight = 0;
   game.roomList = lvlGen.generateLevel();
-  console.log(game.roomList);
+  game.level++;
 
   game.roomList.forEach(function(room) {
     if(room.startRoom)
@@ -77,6 +77,7 @@ function gameUpdate() {
   game.physics.arcade.overlap(game.bulletGroup, game.doorGroup, bulletHitDoor);
 
   //Check Victory
+  //TODO
 
   //Check Defeat
   if(game.countDown < 0 && !game.gameOver)
