@@ -9,6 +9,9 @@ function Collectible(x, y, image) {
   this.progress = 0;
   //TODO create progress bar
 
+  this.active = false;
+  split.setAlpha(this, 0);
+
   game.physics.enable(this, Phaser.Physics.ARCADE);
 
 }
@@ -16,7 +19,7 @@ Collectible.prototype = Object.create(Phaser.Sprite.prototype);
 
 Collectible.prototype.harvest = function() {
 
-  //Add resource
+  //TODO Add resource
 
 };
 
@@ -27,12 +30,22 @@ Collectible.prototype.stopHarvest = function() {
 
 };
 
+Collectible.prototype.activate = function() {
+
+  this.active = true;
+  game.add.tween(this.renderChildren[0]).to({alpha: 1}, 500, 'Linear', true);
+  game.add.tween(this.renderChildren[1]).to({alpha: 1}, 500, 'Linear', true);
+
+};
+
 /*######################################################
                       Gas Tank
 #####################################################*/
 function Gas(x, y, value, size) {
 
   Collectible.call(this, x, y, 'gas');
+
+  split.scale(this, size);
 
 }
 Gas.prototype = Object.create(Collectible.prototype);

@@ -24,10 +24,11 @@ function gameCreate() {
   game.pickupGroup = split.makeGroup();
   game.bulletGroup = split.makeGroup();
   game.progressBarGroup = split.makeGroup();
+  game.fogGroup = split.makeGroup();
 
   //Create Sounds
-  game.sound = {};
-  game.sound.door = game.add.audio('doorSound');
+  game.sounds = {};
+  game.sounds.door = game.add.audio('doorSound');
 
   //Create Level
   game.levelWidth = 0;
@@ -38,10 +39,12 @@ function gameCreate() {
   game.roomList.forEach(function(room) {
     if(room.startRoom)
     {
+      game.startRoom = room;
       game.startX = room.x;
       game.startY = room.y;
     }
   });
+  game.startRoom.activate();
 
   //Players
   game.player1 = new Player(game.startX*game.roomWidth+(game.roomWidth/2) - 100, game.startY*game.roomHeight+(game.roomHeight/2), 'player1', game.pad1);
@@ -50,7 +53,7 @@ function gameCreate() {
   startCameras(game.player1, game.player2);
 
   //Enemy
-  new Enemy(1200, 250, 'enemy', 50, 100, 5, 300);
+  new Ghost(game.player1.x, game.player1.y+540, 'ghost', 50, 100, 5, 300);
 
   //Gas
   new Gas(game.player1.x+15, game.player1.y+80);

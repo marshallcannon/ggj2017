@@ -98,6 +98,22 @@ var split = {
     sprite.renderChildren[0].frame = frame;
     sprite.renderChildren[1].frame = frame;
 
+  },
+
+  scale: function(sprite, amount) {
+
+    sprite.scale.setTo(amount, amount);
+    sprite.renderChildren[0].scale.setTo(amount, amount);
+    sprite.renderChildren[1].scale.setTo(amount, amount);
+
+  },
+
+  setAlpha: function(sprite, amount) {
+
+    sprite.alpha = amount;
+    sprite.renderChildren[0].alpha = amount;
+    sprite.renderChildren[1].alpha = amount;
+
   }
 
 };

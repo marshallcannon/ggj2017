@@ -28,11 +28,13 @@ Door.prototype = Object.create(Phaser.Sprite.prototype);
 
 Door.prototype.openDoor = function() {
 
-  //TODO activate rooms
+  this.room1.activate();
+  this.room2.activate();
+
   this.opened = true;
   split.playAnimation(this, 'open');
   this.body.enable = false;
-  game.sound.door.play();
+  game.sounds.door.play();
 
 };
 

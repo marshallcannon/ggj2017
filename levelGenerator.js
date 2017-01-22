@@ -77,17 +77,14 @@ var lvlGen = {
               left = true;
           }
 
-          if(room > 1)
-          {
-            if(room === 1)
-              spawnFunction = roomSpawns.diff1[game.rnd.between(0, roomSpawns.diff1.length-1)];
-            if(room === 2)
-              spawnFunction = roomSpawns.diff2[game.rnd.between(0, roomSpawns.diff2.length-1)];
-            if(room === 3)
-              spawnFunction = roomSpawns.diff3[game.rnd.between(0, roomSpawns.diff3.length-1)];
-            if(room === 4)
-              spawnFunction = roomSpawns.diff4[game.rnd.between(0, roomSpawns.diff4.length-1)];
-          }
+          if(room === 1)
+            spawnFunction = roomSpawns.diff1[game.rnd.between(0, roomSpawns.diff1.length-1)];
+          if(room === 2)
+            spawnFunction = roomSpawns.diff2[game.rnd.between(0, roomSpawns.diff2.length-1)];
+          if(room === 3)
+            spawnFunction = roomSpawns.diff3[game.rnd.between(0, roomSpawns.diff3.length-1)];
+          if(room === 4)
+            spawnFunction = roomSpawns.diff4[game.rnd.between(0, roomSpawns.diff4.length-1)];
 
           var newRoom = new Room(x, y, startRoom, up, right, down, left, spawnFunction);
 
@@ -277,7 +274,17 @@ var lvlGen = {
 
   roomSpawns: function(roomList) {
 
-    //Spawn enemies and pickups in rooms
+    for(var i = 0; i < roomList.length; i++)
+    {
+
+      var room = roomList[i];
+
+      if(room.spawn)
+      {
+        room.spawn(room);
+      }
+
+    }
 
   }
 

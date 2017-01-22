@@ -9,8 +9,25 @@ function Room(x, y, start, up, right, down, left, spawnFunction) {
   this.left = left;
 
   this.spawn = spawnFunction;
+  this.objects = [];
+
+  this.active = false;
+  this.fog = split.makeSprite(this.x*game.roomWidth, this.y*game.roomHeight, 'fog', game.fogGroup);
 
 }
+
+Room.prototype.activate = function() {
+
+  this.active = true;
+  game.add.tween(this.fog.renderChildren[0]).to( {alpha: 0}, 500, "Linear", true);
+  game.add.tween(this.fog.renderChildren[1]).to( {alpha: 0}, 500, "Linear", true);
+
+  for(var i = 0; i < this.objects.length; i++)
+  {
+    this.objects[i].activate();
+  }
+
+};
 
 //Bounding Box
 function BB(x, y, width, height) {

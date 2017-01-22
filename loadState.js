@@ -4,10 +4,12 @@ function loadAssets() {
   this.load.spritesheet('player2', 'assets/images/AnimSpaceManRun_01.png', 64, 64);
 
   this.load.spritesheet('bg', 'assets/images/BGSheet.png', 540, 540);
+  this.load.image('fog', 'assets/images/fow.png');
 
   this.load.image('bullet', 'assets/images/bullet.png');
 
   this.load.image('enemy', 'assets/images/enemy.png');
+  this.load.spritesheet('ghost', 'assets/images/mew.png', 128, 128);
 
   this.load.image('gas', 'assets/images/gas.png');
 

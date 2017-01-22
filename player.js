@@ -109,6 +109,8 @@ Player.prototype.update = function() {
   {
     if(this.collecting)
     {
+      this.body.velocity.setTo(0, 0);
+      split.playAnimation(this, 'idle');
       this.activate();
     }
     else {
@@ -151,7 +153,7 @@ Player.prototype.findTarget = function() {
   var nearestPickUp = null;
   game.pickupGroup.forEach(function(pickUp) {
 
-    if(game.physics.arcade.distanceBetween(pickUp, player) < 100)
+    if(game.physics.arcade.distanceBetween(pickUp, player) < 50)
     {
       if(!nearestPickUp)
         nearestPickUp = pickUp;
