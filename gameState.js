@@ -12,16 +12,66 @@ function gameCreate() {
   game.pad2 = game.input.gamepad.pad2;
 
   //Groups
+  game.backgroundGroup = split.makeGroup();
+  game.enemyGroup = split.makeGroup();
   game.playerGroup = split.makeGroup();
+  game.bulletGroup = split.makeGroup();
 
-  //Sprites
-  game.player = new Player(100, 100, 'player1', game.pad1);
-  game.player = new Player(200, 100, 'player2', game.pad2);
+  //Background
+  game.background = split.makeSprite(0, 0, 'bg', game.backgroundGroup);
+
+  //Players
+  game.player1 = new Player(100, 100, 'player1', game.pad1);
+  game.player2 = new Player(200, 100, 'player2', game.pad2);
+  startCameras(game.player1, game.player2);
+
+  //Enemy
+  new Enemy(600, 250, 'enemy', 50, 100, 5, 300);
 
 
 
 }
 
 function gameUpdate() {
+
+  game.physics.arcade.overlap(game.bulletGroup, game.enemyGroup, bulletHitEnemy);
+
+}
+
+function startCameras(p1, p2) {
+
+  screen1.world.setBounds(0, 0, 1000, 1000);
+  screen2.world.setBounds(0, 0, 1000, 1000);
+
+  screen1.playerSprite = p1.renderChildren[0];
+  screen1.camera.follow(screen1.playerSprite);
+
+  screen2.playerSprite = p2.renderChildren[1];
+  screen2.camera.follow(screen2.playerSprite);
+
+}
+
+function bulletHitEnemy(bullet, enemy) {
+
+  //Damage
+  enemy.hp -= bullet.damage;
+
+  //Enemy flash
+  enemy.flash();
+  game.time.events.add(20, enemy.stopFlash, enemy);
+
+  //Knockback
+  var xDiff = bullet.x - enemy.x;
+  var yDiff = bullet.y - enemy.y;
+  if(bullet.x - enemy.x <= 0)
+    enemy.body.velocity.x += bullet.knockback*Math.abs(xDiff/enemy.width);
+  else
+    enemy.body.velocity.x -= bullet.knockback*Math.abs(xDiff/enemy.width);
+  if(bullet.y - enemy.y <= 0)
+    enemy.body.velocity.y += bullet.knockback*Math.abs(yDiff/enemy.height);
+  else
+    enemy.body.velocity.y -= bullet.knockback*Math.abs(yDiff/enemy.height);
+
+  split.destroySprite(bullet);
 
 }

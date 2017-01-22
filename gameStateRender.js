@@ -7,12 +7,10 @@ function gameCreateRender() {
   if(this.game.screenNumber === 1)
   {
     this.stage.backgroundColor = 0xFF0000;
-    var testSprite = this.add.sprite(300, 300, 'player1');
   }
   else if(this.game.screenNumber === 2)
   {
     this.stage.backgroundColor = 0x0000FF;
-    var testSprite2 = this.add.sprite(400, 400, 'player2');
   }
 
 }
@@ -33,6 +31,7 @@ function gameUpdateRender() {
 
         sprite.x = sprite.parentSprite.x;
         sprite.y = sprite.parentSprite.y;
+        sprite.scale = sprite.parentSprite.scale;
 
       });
     }
@@ -42,6 +41,7 @@ function gameUpdateRender() {
       {
         element.x = element.parentSprite.x;
         element.y = element.parentSprite.y;
+        element.scale = element.parentSprite.scale;
       }
     }
 

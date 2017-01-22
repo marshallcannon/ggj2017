@@ -6,8 +6,8 @@ var split = {
     var spriteRender1 = screen1.add.sprite(x, y, image);
     var spriteRender2 = screen2.add.sprite(x, y, image);
     sprite.renderChildren = [spriteRender1, spriteRender2];
-    spriteRender1.parent = sprite;
-    spriteRender2.parent = sprite;
+    spriteRender1.parentSprite = sprite;
+    spriteRender2.parentSprite = sprite;
 
     if(group)
     {
@@ -49,11 +49,18 @@ var split = {
     var group = game.add.group();
     var renderGroup1 = screen1.add.group();
     var renderGroup2 = screen2.add.group();
-    console.log(screen1);
 
     group.renderChildren = [renderGroup1, renderGroup2];
 
     return group;
+
+  },
+
+  tintSprite: function(sprite, tint) {
+
+    sprite.tint = tint;
+    sprite.renderChildren[0].tint = tint;
+    sprite.renderChildren[1].tint = tint;
 
   }
 

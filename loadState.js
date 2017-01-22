@@ -1,7 +1,13 @@
 function loadAssets() {
 
-  this.load.image('player1', 'assets/images/SpaceMan_00.png');
-  this.load.image('player2', 'assets/images/SpaceMan_01.png');
+  this.load.spritesheet('player1', 'assets/images/SpaceMan_00_RunAnim.png', 64, 64);
+  this.load.spritesheet('player2', 'assets/images/SpaceMan_01_RunAnim.png', 64, 64);
+
+  this.load.image('bg', 'assets/images/BG.png');
+
+  this.load.image('bullet', 'assets/images/bullet.png');
+
+  this.load.image('enemy', 'assets/images/enemy.png');
 
 }
 
