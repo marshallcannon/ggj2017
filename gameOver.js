@@ -18,7 +18,7 @@ function gameOverCreate() {
 
     game.gameOverText = split.makeText(screen1.width/2, 50, 'Game Over', 40);
     split.centerAnchor(game.gameOverText);
-    game.finalScoreText = split.makeText(screen1.width/2, 85, 'Level ' + game.level, 24);
+    game.finalScoreText = split.makeText(screen1.width/2, 90, 'Level ' + game.level, 24);
     split.centerAnchor(game.finalScoreText);
 
     game.p1GameOverText = screen1.add.bitmapText(screen1.width/2, 450, 'font', 'Try Again');

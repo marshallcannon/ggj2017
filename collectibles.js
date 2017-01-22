@@ -48,6 +48,8 @@ function Gas(x, y, value, size) {
 
   Collectible.call(this, x, y, 'gas');
 
+  this.value = value;
+
   split.scale(this, size);
 
 }
@@ -55,6 +57,7 @@ Gas.prototype = Object.create(Collectible.prototype);
 
 Gas.prototype.harvest = function() {
 
+  game.fuelAmount += this.value;
   split.destroySprite(this);
 
 };

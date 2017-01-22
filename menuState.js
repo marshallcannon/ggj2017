@@ -18,10 +18,10 @@ function menuCreate() {
   split.centerAnchor(game.p2MenuText);
 
   //Game Variables
-  game.countDownMax = 3;
+  game.countDownMax = 30;
   game.countDown = game.countDownMax;
   game.gameOver = false;
-  game.level = 0;
+  game.level = 1;
   game.fuelGoal = 20;
 
 }
@@ -67,7 +67,6 @@ function menuUpdateRender() {
 
 function startGame() {
 
-  console.log('start game');
   screen1.state.start('game');
   screen2.state.start('game');
 

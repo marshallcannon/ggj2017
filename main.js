@@ -15,6 +15,10 @@ var gameState = {preload: gamePreload, create: gameCreate, update: gameUpdate};
 var gameStateRender1 = {preload: gamePreloadRender, create: gameCreateRender, update: gameUpdateRender};
 var gameStateRender2 = {preload: gamePreloadRender, create: gameCreateRender, update: gameUpdateRender};
 
+var shipState = {preload: shipPreload, create: shipCreate, update: shipUpdate};
+var shipStateRender1 = {preload: shipPreload, create: shipCreate, update: shipUpdate};
+var shipStateRender2 = {preload: shipPreload, create: shipCreate, update: shipUpdate};
+
 var gameOverState = {preload: gameOverPreload, create: gameOverCreate, update: gameOverUpdate};
 var gameOverStateRender1 = {preload: gameOverPreload, create: gameOverCreate, update: gameOverUpdate};
 var gameOverStateRender2 = {preload: gameOverPreload, create: gameOverCreate, update: gameOverUpdate};

@@ -11,6 +11,11 @@ function gameCreate() {
   //Phaser Systems
   game.physics.startSystem(Phaser.Physics.ARCADE);
 
+  //Game Variables
+  game.fuelAmount = 0;
+  game.victory = false;
+  game.countDown = game.countDownMax;
+
   //Groups
   game.backgroundGroup = split.makeGroup();
   game.boundingBoxGroup = split.makeGroup();
@@ -25,13 +30,18 @@ function gameCreate() {
 
   //Create Sounds
   game.sounds = {};
+  game.sounds.music = game.add.audio('music');
+  game.sounds.warning = game.add.audio('warning');
   game.sounds.door = game.add.audio('doorSound');
+  game.sounds.victory = game.add.audio('victory');
+  game.sounds.failure = game.add.audio('failure');
+
+  game.sounds.music.play();
 
   //Create Level
   game.levelWidth = 0;
   game.levelHeight = 0;
   game.roomList = lvlGen.generateLevel();
-  game.level++;
 
   game.roomList.forEach(function(room) {
     if(room.startRoom)
@@ -64,10 +74,25 @@ function gameCreate() {
   split.fixToCamera(game.countdownText);
   game.time.events.add(1000, tickDown, this);
 
+  game.fuelText = split.makeText(420, 460, game.fuelAmount.toString(), 32, game.hudGroup);
+  split.centerAnchor(game.fuelText);
+  split.fixToCamera(game.fuelText);
+  split.tintSprite(game.fuelText, 0xc400ff);
+
+  game.fuelDivider = split.makeSprite(418, 488, 'divider', game.hudGroup);
+  split.centerAnchor(game.fuelDivider);
+  split.fixToCamera(game.fuelDivider);
+
+  game.fuelGoalText = split.makeText(420, 510, game.fuelGoal.toString(), 32, game.hudGroup);
+  split.centerAnchor(game.fuelGoalText);
+  split.fixToCamera(game.fuelGoalText);
+  split.tintSprite(game.fuelGoalText, 0xc400ff);
+
 }
 
 function gameUpdate() {
 
+  //Collision
   game.physics.arcade.collide(game.player1, game.boundingBoxGroup);
   game.physics.arcade.collide(game.player2, game.boundingBoxGroup);
   game.physics.arcade.collide(game.player1, game.doorGroup);
@@ -76,21 +101,53 @@ function gameUpdate() {
   game.physics.arcade.overlap(game.bulletGroup, game.boundingBoxGroup, bulletHitWall);
   game.physics.arcade.overlap(game.bulletGroup, game.doorGroup, bulletHitDoor);
 
+  //Update text
+  split.updateText(game.fuelText, game.fuelAmount.toString());
+
   //Check Victory
-  //TODO
+  if(game.fuelAmount >= game.fuelGoal)
+  {
+      split.tintSprite(game.fuelText, 0xFFFFFF);
+      split.tintSprite(game.fuelGoalText, 0xFFFFFF);
+
+      if(!game.victory)
+      {
+        if(game.player1.x > game.startRoom.x*game.roomWidth && game.player1.x < game.startRoom.x*game.roomWidth + game.roomWidth &&
+          game.player1.y > game.startRoom.y*game.roomHeight && game.player1.y < game.startRoom.y*game.roomHeight + game.roomHeight)
+        {
+          if(game.player2.x > game.startRoom.x*game.roomWidth && game.player2.x < game.startRoom.x*game.roomWidth + game.roomWidth &&
+            game.player2.y > game.startRoom.y*game.roomHeight && game.player2.y < game.startRoom.y*game.roomHeight + game.roomHeight)
+          {
+            screen1.camera.onFadeComplete.removeAll();
+            screen1.camera.onFadeComplete.add(victory, this);
+            screen1.camera.fade(0xFFFFFF, 1000);
+            screen2.camera.fade(0xFFFFFF, 1000);
+            game.sounds.victory.play();
+            game.sounds.music.fadeOut(500);
+            game.sounds.warning.fadeOut(500);
+            game.victory = true;
+          }
+        }
+      }
+  }
 
   //Check Defeat
-  if(game.countDown < 0 && !game.gameOver)
+  if(game.countDown < 0 && !game.gameOver && !game.victory)
   {
-    screen1.camera.fade(0xFFFFFF, 800);
-    screen2.camera.fade(0xFFFFFF, 800);
+    screen1.camera.fade(0xFF0000, 800);
+    screen2.camera.fade(0xFF0000, 800);
     game.time.events.removeAll();
     game.time.events.add(800, function(){screen1.state.start('gameOver');screen2.state.start('gameOver');}, this);
+    game.sounds.failure.play();
+    game.sounds.music.fadeOut(500);
+    game.sounds.warning.fadeOut(500);
     split.updateText(game.countdownText, 'FAILURE');
     game.gameOver = true;
   }
   if(screen1.state.current === 'gameOver' && screen2.state.current === 'gameOver')
     game.state.start('gameOver');
+  if(screen1.state.current === 'ship' && screen2.state.current === 'ship')
+    game.state.start('ship');
 
 }
 
@@ -117,6 +174,16 @@ function tickDown() {
   game.countDown--;
   split.updateText(game.countdownText, game.countDown);
 
+  if(game.countDown === 24)
+    game.sounds.warning.play();
+
   game.time.events.add(1000, tickDown, this);
+
+}
+
+function victory() {
+
+  screen1.state.start('ship');
+  screen2.state.start('ship');
 
 }

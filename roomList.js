@@ -24,13 +24,13 @@ var roomSpawns = {
   diff2: [
 
     function(room) {
-      spawn.resource(room, 100, 300, 'gas', 50);
-      spawn.resource(room, 200, 300, 'gas', 50, 3);
+      spawn.resource(room, 100, 300, 'gas', 5);
+      spawn.resource(room, 200, 300, 'gas', 15, 3);
       spawn.enemy(room, 200, 400, 'ghost', 1);
     },
     function(room) {
-      spawn.resource(room, 300, 100, 'gas', 50);
-      spawn.resource(room, 200, 200, 'gas', 50);
+      spawn.resource(room, 300, 100, 'gas', 5);
+      spawn.resource(room, 200, 200, 'gas', 5);
       spawn.enemy(room, 200, 400, 'ghost', 2);
     }
 
