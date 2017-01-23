@@ -2,7 +2,28 @@ var lvlGen = {
 
   generateLevel: function() {
 
-    var randomLayoutNumber = game.rnd.between(0, layouts.length-1);
+    var randomLayoutNumber = 0;
+    switch(game.level)
+    {
+      case 1:
+        randomLayoutNumber = game.rnd.between(0, 2);
+        break;
+      case 2:
+        randomLayoutNumber = game.rnd.between(3, 5);
+        break;
+      case 3:
+        randomLayoutNumber = game.rnd.between(6, 8);
+        break;
+      case 4:
+        randomLayoutNumber = game.rnd.between(9, 11);
+        break;
+      case 5:
+        randomLayoutNumber = game.rnd.between(12, 14);
+        break;
+      default:
+        randomLayoutNumber = game.rnd.between(12, 14);
+        break;
+    }
     this.layout = layouts[randomLayoutNumber];
 
     this.roomMap = [];
@@ -20,7 +41,10 @@ var lvlGen = {
 
     this.rooms = this.chooseRooms(this.layout);
 
-    this.placeRooms(this.rooms);
+    var roomColors = [0xFFFFFF, 0x4e8e60, 0x894c84, 0x17150, 0x975f45];
+    //roomColors[game.rnd.between(0, roomColors.length-1)]
+
+    this.placeRooms(this.rooms, 0xFFFFFF);
 
     this.placeWalls(this.rooms);
 
@@ -55,36 +79,44 @@ var lvlGen = {
         if(room > 0)
         {
           if(room === 1)
+          {
             startRoom = true;
-          if(i > 0)
-          {
-            if(roomLayout[i-1][j] > 0)
-              up = true;
+            up = false;
+            right = false;
+            down = true;
+            left = false;
+            spawnFunction = function() {};
           }
-          if(j < roomLayout[i].length-1)
+          else
           {
-            if(roomLayout[i][j+1] > 0)
-              right = true;
-          }
-          if(i < roomLayout.length-1)
-          {
-            if(roomLayout[i+1][j] > 0)
-              down = true;
-          }
-          if(j > 0)
-          {
-            if(roomLayout[i][j-1] > 0)
-              left = true;
-          }
+            if(i > 0)
+            {
+              if(roomLayout[i-1][j] > 0)
+                up = true;
+            }
+            if(j < roomLayout[i].length-1)
+            {
+              if(roomLayout[i][j+1] > 0)
+                right = true;
+            }
+            if(i < roomLayout.length-1)
+            {
+              if(roomLayout[i+1][j] > 0)
+                down = true;
+            }
+            if(j > 0)
+            {
+              if(roomLayout[i][j-1] > 0)
+                left = true;
+            }
 
-          if(room === 1)
-            spawnFunction = roomSpawns.diff1[game.rnd.between(0, roomSpawns.diff1.length-1)];
-          if(room === 2)
-            spawnFunction = roomSpawns.diff2[game.rnd.between(0, roomSpawns.diff2.length-1)];
-          if(room === 3)
-            spawnFunction = roomSpawns.diff3[game.rnd.between(0, roomSpawns.diff3.length-1)];
-          if(room === 4)
-            spawnFunction = roomSpawns.diff4[game.rnd.between(0, roomSpawns.diff4.length-1)];
+            if(room === 2)
+              spawnFunction = roomSpawns.diff2[game.rnd.between(0, roomSpawns.diff2.length-1)];
+            if(room === 3)
+              spawnFunction = roomSpawns.diff3[game.rnd.between(0, roomSpawns.diff3.length-1)];
+            if(room === 4)
+              spawnFunction = roomSpawns.diff4[game.rnd.between(0, roomSpawns.diff4.length-1)];
+          }
 
           var newRoom = new Room(x, y, startRoom, up, right, down, left, spawnFunction);
 
@@ -98,47 +130,56 @@ var lvlGen = {
 
   },
 
-  placeRooms: function(roomList) {
+  placeRooms: function(roomList, tint) {
 
     for(var i = 0; i < roomList.length; i++)
     {
       var room = roomList[i];
       var frame = 0;
-      room.image = split.makeSprite(room.x*game.roomWidth, room.y*game.roomHeight, 'bg', game.backgroundGroup);
-      if(room.left && !room.up && !room.right && !room.down)
-        frame = 0;
-      else if(!room.left && room.up && !room.right && !room.down)
-        frame = 1;
-      else if(!room.left && !room.up && room.right && !room.down)
-        frame = 2;
-      else if(!room.left && !room.up && !room.right && room.down)
-        frame = 3;
-      else if(room.left && room.up && !room.right && !room.down)
-        frame = 4;
-      else if(room.left && !room.up && room.right && !room.down)
-        frame = 5;
-      else if(room.left && !room.up && !room.right && room.down)
-        frame = 6;
-      else if(!room.left && room.up && room.right && !room.down)
-        frame = 7;
-      else if(!room.left && room.up && !room.right && room.down)
-        frame = 8;
-      else if(!room.left && !room.up && room.right && room.down)
-        frame = 9;
-      else if(!room.left && room.up && room.right && room.down)
-        frame = 10;
-      else if(room.left && !room.up && room.right && room.down)
-        frame = 11;
-      else if(room.left && room.up && !room.right && room.down)
-        frame = 12;
-      else if(room.left && room.up && room.right && !room.down)
-        frame = 13;
-      else if(room.left && room.up && room.right && room.down)
-        frame = 14;
 
-      room.image.frame = frame;
-      room.image.renderChildren[0].frame = frame;
-      room.image.renderChildren[1].frame = frame;
+      if(room.startRoom)
+      {
+        room.image = split.makeSprite(room.x*game.roomWidth, room.y*game.roomHeight, 'shipRoom', game.backgroundGroup);
+      }
+      else {
+
+        room.image = split.makeSprite(room.x*game.roomWidth, room.y*game.roomHeight, 'bg', game.backgroundGroup);
+        split.tintSprite(room.image, tint);
+        if(room.left && !room.up && !room.right && !room.down)
+          frame = 0;
+        else if(!room.left && room.up && !room.right && !room.down)
+          frame = 1;
+        else if(!room.left && !room.up && room.right && !room.down)
+          frame = 2;
+        else if(!room.left && !room.up && !room.right && room.down)
+          frame = 3;
+        else if(room.left && room.up && !room.right && !room.down)
+          frame = 4;
+        else if(room.left && !room.up && room.right && !room.down)
+          frame = 5;
+        else if(room.left && !room.up && !room.right && room.down)
+          frame = 6;
+        else if(!room.left && room.up && room.right && !room.down)
+          frame = 7;
+        else if(!room.left && room.up && !room.right && room.down)
+          frame = 8;
+        else if(!room.left && !room.up && room.right && room.down)
+          frame = 9;
+        else if(!room.left && room.up && room.right && room.down)
+          frame = 10;
+        else if(room.left && !room.up && room.right && room.down)
+          frame = 11;
+        else if(room.left && room.up && !room.right && room.down)
+          frame = 12;
+        else if(room.left && room.up && room.right && !room.down)
+          frame = 13;
+        else if(room.left && room.up && room.right && room.down)
+          frame = 14;
+
+        room.image.frame = frame;
+        room.image.renderChildren[0].frame = frame;
+        room.image.renderChildren[1].frame = frame;
+      }
 
     }
 
@@ -153,99 +194,110 @@ var lvlGen = {
       var baseX = room.x*game.roomWidth;
       var baseY = room.y*game.roomHeight;
 
-      switch(room.image.frame)
+      if(room.startRoom)
       {
-        case 0:
-          bbPresets.top(baseX, baseY);
-          bbPresets.right(baseX, baseY);
-          bbPresets.bottom(baseX, baseY);
-          bbPresets.leftSplit(baseX, baseY);
-          break;
-        case 1:
-          //Top
-          bbPresets.topSplit(baseX, baseY);
-          bbPresets.right(baseX, baseY);
-          bbPresets.bottom(baseX, baseY);
-          bbPresets.left(baseX, baseY);
-          break;
-        case 2:
-          bbPresets.top(baseX, baseY);
-          bbPresets.rightSplit(baseX, baseY);
-          bbPresets.bottom(baseX, baseY);
-          bbPresets.left(baseX, baseY);
-          break;
-        case 3:
-          bbPresets.top(baseX, baseY);
-          bbPresets.right(baseX, baseY);
-          bbPresets.bottomSplit(baseX, baseY);
-          bbPresets.left(baseX, baseY);
-          break;
-        case 4:
-          bbPresets.topSplit(baseX, baseY);
-          bbPresets.right(baseX, baseY);
-          bbPresets.bottom(baseX, baseY);
-          bbPresets.leftSplit(baseX, baseY);
-          break;
-        case 5:
-          bbPresets.top(baseX, baseY);
-          bbPresets.rightSplit(baseX, baseY);
-          bbPresets.bottom(baseX, baseY);
-          bbPresets.leftSplit(baseX, baseY);
-          break;
-        case 6:
-          bbPresets.top(baseX, baseY);
-          bbPresets.right(baseX, baseY);
-          bbPresets.bottomSplit(baseX, baseY);
-          bbPresets.leftSplit(baseX, baseY);
-          break;
-        case 7:
-          bbPresets.topSplit(baseX, baseY);
-          bbPresets.rightSplit(baseX, baseY);
-          bbPresets.bottom(baseX, baseY);
-          bbPresets.left(baseX, baseY);
-          break;
-        case 8:
-          bbPresets.topSplit(baseX, baseY);
-          bbPresets.right(baseX, baseY);
-          bbPresets.bottomSplit(baseX, baseY);
-          bbPresets.left(baseX, baseY);
-          break;
-        case 9:
-          bbPresets.top(baseX, baseY);
-          bbPresets.rightSplit(baseX, baseY);
-          bbPresets.bottomSplit(baseX, baseY);
-          bbPresets.left(baseX, baseY);
-          break;
-        case 10:
-          bbPresets.topSplit(baseX, baseY);
-          bbPresets.rightSplit(baseX, baseY);
-          bbPresets.bottomSplit(baseX, baseY);
-          bbPresets.left(baseX, baseY);
-          break;
-        case 11:
-          bbPresets.top(baseX, baseY);
-          bbPresets.rightSplit(baseX, baseY);
-          bbPresets.bottomSplit(baseX, baseY);
-          bbPresets.leftSplit(baseX, baseY);
-          break;
-        case 12:
-          bbPresets.topSplit(baseX, baseY);
-          bbPresets.right(baseX, baseY);
-          bbPresets.bottomSplit(baseX, baseY);
-          bbPresets.leftSplit(baseX, baseY);
-          break;
-        case 13:
-          bbPresets.topSplit(baseX, baseY);
-          bbPresets.rightSplit(baseX, baseY);
-          bbPresets.bottom(baseX, baseY);
-          bbPresets.leftSplit(baseX, baseY);
-          break;
-        case 14:
-          bbPresets.topSplit(baseX, baseY);
-          bbPresets.rightSplit(baseX, baseY);
-          bbPresets.bottomSplit(baseX, baseY);
-          bbPresets.leftSplit(baseX, baseY);
-          break;
+        game.boundingBoxGroup.add(new BB(baseX+68, baseY+108, 408, 68));
+        game.boundingBoxGroup.add(new BB(baseX+68, baseY+146, 50, 127));
+        game.boundingBoxGroup.add(new BB(baseX+419, baseY+125, 79, 149));
+        game.boundingBoxGroup.add(new BB(baseX+60, baseY+248, 168, 288));
+        game.boundingBoxGroup.add(new BB(baseX+308, baseY+248, 176, 288));
+      }
+      else
+      {
+        switch(room.image.frame)
+        {
+          case 0:
+            bbPresets.top(baseX, baseY);
+            bbPresets.right(baseX, baseY);
+            bbPresets.bottom(baseX, baseY);
+            bbPresets.leftSplit(baseX, baseY);
+            break;
+          case 1:
+            //Top
+            bbPresets.topSplit(baseX, baseY);
+            bbPresets.right(baseX, baseY);
+            bbPresets.bottom(baseX, baseY);
+            bbPresets.left(baseX, baseY);
+            break;
+          case 2:
+            bbPresets.top(baseX, baseY);
+            bbPresets.rightSplit(baseX, baseY);
+            bbPresets.bottom(baseX, baseY);
+            bbPresets.left(baseX, baseY);
+            break;
+          case 3:
+            bbPresets.top(baseX, baseY);
+            bbPresets.right(baseX, baseY);
+            bbPresets.bottomSplit(baseX, baseY);
+            bbPresets.left(baseX, baseY);
+            break;
+          case 4:
+            bbPresets.topSplit(baseX, baseY);
+            bbPresets.right(baseX, baseY);
+            bbPresets.bottom(baseX, baseY);
+            bbPresets.leftSplit(baseX, baseY);
+            break;
+          case 5:
+            bbPresets.top(baseX, baseY);
+            bbPresets.rightSplit(baseX, baseY);
+            bbPresets.bottom(baseX, baseY);
+            bbPresets.leftSplit(baseX, baseY);
+            break;
+          case 6:
+            bbPresets.top(baseX, baseY);
+            bbPresets.right(baseX, baseY);
+            bbPresets.bottomSplit(baseX, baseY);
+            bbPresets.leftSplit(baseX, baseY);
+            break;
+          case 7:
+            bbPresets.topSplit(baseX, baseY);
+            bbPresets.rightSplit(baseX, baseY);
+            bbPresets.bottom(baseX, baseY);
+            bbPresets.left(baseX, baseY);
+            break;
+          case 8:
+            bbPresets.topSplit(baseX, baseY);
+            bbPresets.right(baseX, baseY);
+            bbPresets.bottomSplit(baseX, baseY);
+            bbPresets.left(baseX, baseY);
+            break;
+          case 9:
+            bbPresets.top(baseX, baseY);
+            bbPresets.rightSplit(baseX, baseY);
+            bbPresets.bottomSplit(baseX, baseY);
+            bbPresets.left(baseX, baseY);
+            break;
+          case 10:
+            bbPresets.topSplit(baseX, baseY);
+            bbPresets.rightSplit(baseX, baseY);
+            bbPresets.bottomSplit(baseX, baseY);
+            bbPresets.left(baseX, baseY);
+            break;
+          case 11:
+            bbPresets.top(baseX, baseY);
+            bbPresets.rightSplit(baseX, baseY);
+            bbPresets.bottomSplit(baseX, baseY);
+            bbPresets.leftSplit(baseX, baseY);
+            break;
+          case 12:
+            bbPresets.topSplit(baseX, baseY);
+            bbPresets.right(baseX, baseY);
+            bbPresets.bottomSplit(baseX, baseY);
+            bbPresets.leftSplit(baseX, baseY);
+            break;
+          case 13:
+            bbPresets.topSplit(baseX, baseY);
+            bbPresets.rightSplit(baseX, baseY);
+            bbPresets.bottom(baseX, baseY);
+            bbPresets.leftSplit(baseX, baseY);
+            break;
+          case 14:
+            bbPresets.topSplit(baseX, baseY);
+            bbPresets.rightSplit(baseX, baseY);
+            bbPresets.bottomSplit(baseX, baseY);
+            bbPresets.leftSplit(baseX, baseY);
+            break;
+        }
       }
 
     }

@@ -73,8 +73,7 @@ function shipUpdate() {
 }
 
 function startNextLevel() {
-
-  console.log('starting');
+  
   screen1.state.start('game');
   screen2.state.start('game');
 

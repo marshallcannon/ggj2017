@@ -54,8 +54,8 @@ function gameCreate() {
   game.startRoom.activate();
 
   //Players
-  game.player1 = new Player(game.startX*game.roomWidth+(game.roomWidth/2) - 100, game.startY*game.roomHeight+(game.roomHeight/2), 'player1', game.pad1);
-  game.player2 = new Player(game.startX*game.roomWidth+(game.roomWidth/2) + 100, game.startY*game.roomHeight+(game.roomHeight/2), 'player2', game.pad2);
+  game.player1 = new Player(game.startX*game.roomWidth+(game.roomWidth/2) - 50, game.startY*game.roomHeight+(game.roomHeight/2)-50, 'player1', game.pad1);
+  game.player2 = new Player(game.startX*game.roomWidth+(game.roomWidth/2) + 50, game.startY*game.roomHeight+(game.roomHeight/2)-50, 'player2', game.pad2);
   setBounds(game.levelWidth*960, game.levelHeight*540);
   startCameras(game.player1, game.player2);
 
@@ -97,9 +97,13 @@ function gameUpdate() {
   game.physics.arcade.collide(game.player2, game.boundingBoxGroup);
   game.physics.arcade.collide(game.player1, game.doorGroup);
   game.physics.arcade.collide(game.player2, game.doorGroup);
+  game.physics.arcade.overlap(game.player1, game.enemyGroup, playerHitEnemy);
+  game.physics.arcade.overlap(game.player2, game.enemyGroup, playerHitEnemy);
   game.physics.arcade.overlap(game.bulletGroup, game.enemyGroup, bulletHitEnemy);
   game.physics.arcade.overlap(game.bulletGroup, game.boundingBoxGroup, bulletHitWall);
   game.physics.arcade.overlap(game.bulletGroup, game.doorGroup, bulletHitDoor);
+  game.physics.arcade.collide(game.enemyGroup, game.boundingBoxGroup, null, function(enemy, wall){if(enemy.solid){return true;}else{return false;}});
+  game.physics.arcade.collide(game.enemyGroup, game.doorGroup, null, function(enemy, door){if(enemy.solid){return true;}else{return false;}});
 
   //Update text
   split.updateText(game.fuelText, game.fuelAmount.toString());

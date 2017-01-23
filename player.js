@@ -14,6 +14,9 @@ function Player(x, y, image, gamepad) {
   this.body.offset.setTo(18, 40);
   this.body.setSize(30, 15);
 
+  this.spawnX = x;
+  this.spawnY = y;
+
   this.controller = gamepad;
 
   this.speed = 250;
@@ -21,11 +24,14 @@ function Player(x, y, image, gamepad) {
   this.bulletTimerMax = 10;
   this.bulletTimer = 0;
 
-  this.bulletDirectionX = 0;
+  this.bulletDirectionX = 1;
   this.bulletDirectionY = 0;
 
   this.bulletSpeed = 800;
 
+  this.deathTimer = 0;
+
+  this.target = null;
   this.collecting = false;
 
 }
@@ -97,8 +103,11 @@ Player.prototype.update = function() {
     {
         if(this.bulletTimer <= 0)
         {
-          var newBullet = new Bullet(this.x, this.y, 'bullet', this.bulletDirectionX*this.bulletSpeed, this.bulletDirectionY*this.bulletSpeed, 100, 5);
-          this.bulletTimer = this.bulletTimerMax;
+          if(!this.dead)
+          {
+            var newBullet = new Bullet(this.x, this.y, 'bullet', this.bulletDirectionX*this.bulletSpeed, this.bulletDirectionY*this.bulletSpeed, 200, 5);
+            this.bulletTimer = this.bulletTimerMax;
+          }
         }
     }
   }
@@ -126,6 +135,14 @@ Player.prototype.update = function() {
       this.target.stopHarvest();
       this.target = null;
     }
+  }
+
+  if(this.controller.isDown(Phaser.Gamepad.XBOX360_Y))
+  {
+    game.sounds.music.stop();
+    screen1.state.start('game');
+    screen2.state.start('game');
+    game.time.events.add(1000, function(){game.state.start('game');}, this);
   }
 
 };
@@ -196,3 +213,57 @@ Player.prototype.activate = function() {
   }
 
 };
+
+Player.prototype.die = function() {
+
+  var loseAmount = Math.round(game.fuelAmount*0.25);
+  split.makeFloatingText(this.x, this.y-50, loseAmount.toString(), 0xFF0000);
+  game.fuelAmount -= loseAmount;
+  this.deathTimer = 5;
+  this.body.enable = false;
+  split.setAlpha(this, 0);
+  this.dead = true;
+
+  game.time.events.add(1000, this.runDeathTimer, this);
+
+};
+
+Player.prototype.runDeathTimer = function() {
+
+  if(this.deathTimer === 0)
+  {
+    this.respawn();
+    console.log('respawn');
+    return null;
+  }
+  else {
+
+    split.makeFloatingText(this.x, this.y-50, this.deathTimer.toString(), 0xFFFFFF);
+    this.deathTimer--;
+
+    game.time.events.add(1000, this.runDeathTimer, this);
+
+  }
+
+};
+
+Player.prototype.respawn = function() {
+
+  split.setAlpha(this, 1);
+  this.x = this.spawnX;
+  this.y = this.spawnY;
+  this.body.x = this.spawnX;
+  this.body.y = this.spawnY;
+  console.log(this.spawnX, this.spawnY, this.x, this.y);
+  this.dead = false;
+  game.time.events.add(100, function(){this.body.enable = true;}, this);
+  game.time.events.add(150, function(){ this.x = this.spawnX; this.y = this.spawnY;}, this);
+
+};
+
+function playerHitEnemy(player, enemy) {
+
+  player.die();
+  split.destroySprite(enemy);
+
+}

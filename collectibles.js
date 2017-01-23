@@ -55,9 +55,34 @@ function Gas(x, y, value, size) {
 }
 Gas.prototype = Object.create(Collectible.prototype);
 
+Gas.prototype.update = function() {
+
+  if(this.active)
+  {var percentage = (this.progress/this.timeToCollect)*100;
+
+  if(percentage < 12.5)
+    split.setFrame(this, 0);
+  else if(percentage < 25)
+    split.setFrame(this, 1);
+  else if(percentage < 37.5)
+    split.setFrame(this, 2);
+  else if(percentage < 50)
+    split.setFrame(this, 3);
+  else if(percentage < 62.5)
+    split.setFrame(this, 4);
+  else if(percentage < 75)
+    split.setFrame(this, 5);
+  else if(percentage < 87.5)
+    split.setFrame(this, 6);
+  else
+    split.setFrame(this, 7);}
+
+};
+
 Gas.prototype.harvest = function() {
 
   game.fuelAmount += this.value;
+  split.makeFloatingText(this.x, this.y-50, this.value.toString(), 0xc400ff);
   split.destroySprite(this);
 
 };

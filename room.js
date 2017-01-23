@@ -18,13 +18,19 @@ function Room(x, y, start, up, right, down, left, spawnFunction) {
 
 Room.prototype.activate = function() {
 
-  this.active = true;
-  game.add.tween(this.fog.renderChildren[0]).to( {alpha: 0}, 500, "Linear", true);
-  game.add.tween(this.fog.renderChildren[1]).to( {alpha: 0}, 500, "Linear", true);
-
-  for(var i = 0; i < this.objects.length; i++)
+  if(!this.active)
   {
-    this.objects[i].activate();
+    this.active = true;
+    game.add.tween(this.fog.renderChildren[0]).to( {alpha: 0}, 300, "Linear", true);
+    game.add.tween(this.fog.renderChildren[1]).to( {alpha: 0}, 300, "Linear", true);
+
+    game.time.events.add(300, function() {
+      for(var i = 0; i < this.objects.length; i++)
+      {
+        this.objects[i].activate();
+      }
+    }, this);
+
   }
 
 };

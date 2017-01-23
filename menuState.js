@@ -4,7 +4,10 @@ function menuPreload() {
 
 function menuCreate() {
 
-  //TODO Load background
+  screen1.add.sprite(0, 0, 'splashLeft');
+  screen2.add.sprite(0, 0, 'splashRight');
+  screen1.add.bitmapText(screen1.width/2, 100, 'font', 'Shockwave', 40).anchor.setTo(0.5, 0.5);
+  screen2.add.bitmapText(screen2.width/2-10, 100, 'font', 'Supernova', 40).anchor.setTo(0.5, 0.5);
 
   game.input.gamepad.start();
   game.pad1 = game.input.gamepad.pad1;
@@ -18,11 +21,11 @@ function menuCreate() {
   split.centerAnchor(game.p2MenuText);
 
   //Game Variables
-  game.countDownMax = 30;
+  game.countDownMax = 100;
   game.countDown = game.countDownMax;
   game.gameOver = false;
   game.level = 1;
-  game.fuelGoal = 20;
+  game.fuelGoal = 50;
 
 }
 
