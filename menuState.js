@@ -72,5 +72,6 @@ function startGame() {
 
   screen1.state.start('game');
   screen2.state.start('game');
+  game.sounds.select.play();
 
 }

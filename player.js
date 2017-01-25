@@ -59,6 +59,19 @@ Player.prototype.update = function() {
     {
       this.body.velocity.x = xAxisLeft*this.speed;
       split.playAnimation(this, 'run');
+      if(this.controller === game.pad1)
+      {
+        if(!game.sounds.playerStep1.isPlaying)
+        {
+          game.sounds.playerStep1.play();
+        }
+      }
+      else {
+        if(!game.sounds.playerStep2.isPlaying)
+        {
+          game.sounds.playerStep2.play();
+        }
+      }
     }
     else {
       this.body.velocity.x = 0;
@@ -68,14 +81,36 @@ Player.prototype.update = function() {
     {
       this.body.velocity.y = yAxisLeft*this.speed;
       split.playAnimation(this, 'run');
+      if(this.controller === game.pad1)
+      {
+        if(!game.sounds.playerStep1.isPlaying)
+        {
+          game.sounds.playerStep1.play();
+        }
+      }
+      else {
+        if(!game.sounds.playerStep2.isPlaying)
+        {
+          game.sounds.playerStep2.play();
+        }
+      }
     }
     else {
       this.body.velocity.y = 0;
-    }
-
-    if(xAxisLeft < 0.1 && xAxisLeft > -0.1 && yAxisLeft < 0.1 && yAxisLeft > -0.1)
-    {
       split.playAnimation(this, 'idle');
+      if(this.controller === game.pad1)
+      {
+        if(game.sounds.playerStep1.isPlaying)
+        {
+          game.sounds.playerStep1.stop();
+        }
+      }
+      else {
+        if(game.sounds.playerStep2.isPlaying)
+        {
+          game.sounds.playerStep2.stop();
+        }
+      }
     }
 
     //Right Joystick
@@ -107,6 +142,7 @@ Player.prototype.update = function() {
           {
             var newBullet = new Bullet(this.x, this.y, 'bullet', this.bulletDirectionX*this.bulletSpeed, this.bulletDirectionY*this.bulletSpeed, 200, 5);
             this.bulletTimer = this.bulletTimerMax;
+            game.sounds.gunFire.play();
           }
         }
     }
@@ -204,7 +240,13 @@ Player.prototype.activate = function() {
 
   //If it's a collectible
   if(this.target.progress < this.target.timeToCollect)
+  {
     this.target.progress++;
+    if(!game.sounds.fuel.isPlaying)
+    {
+      game.sounds.fuel.play();
+    }
+  }
   else
   {
     this.target.harvest();
@@ -233,7 +275,6 @@ Player.prototype.runDeathTimer = function() {
   if(this.deathTimer === 0)
   {
     this.respawn();
-    console.log('respawn');
     return null;
   }
   else {
@@ -254,7 +295,6 @@ Player.prototype.respawn = function() {
   this.y = this.spawnY;
   this.body.x = this.spawnX;
   this.body.y = this.spawnY;
-  console.log(this.spawnX, this.spawnY, this.x, this.y);
   this.dead = false;
   game.time.events.add(100, function(){this.body.enable = true;}, this);
   game.time.events.add(150, function(){ this.x = this.spawnX; this.y = this.spawnY;}, this);

@@ -17,6 +17,7 @@ function gameCreate() {
   game.countDown = game.countDownMax;
 
   //Groups
+  game.starGroup = split.makeGroup();
   game.backgroundGroup = split.makeGroup();
   game.boundingBoxGroup = split.makeGroup();
   game.doorGroup = split.makeGroup();
@@ -28,15 +29,21 @@ function gameCreate() {
   game.fogGroup = split.makeGroup();
   game.hudGroup = split.makeGroup();
 
-  //Create Sounds
-  game.sounds = {};
-  game.sounds.music = game.add.audio('music');
-  game.sounds.warning = game.add.audio('warning');
-  game.sounds.door = game.add.audio('doorSound');
-  game.sounds.victory = game.add.audio('victory');
-  game.sounds.failure = game.add.audio('failure');
-
+  //Play Music
   game.sounds.music.play();
+
+  //Load Background
+  game.starBG = game.add.tileSprite(0, 0, 480, 540, 'stars');
+  game.starGroup.add(game.starBG);
+  game.starGroup.fixedToCamera = true;
+  game.starBG1 = screen1.add.tileSprite(0, 0, 480, 540, 'stars');
+  game.starBG1.parentSprite = game.starBG;
+  game.starBG1.fixedToCamera = true;
+  game.starGroup.renderChildren[0].add(game.starBG1);
+  game.starBG2 = screen2.add.tileSprite(0, 0, 480, 540, 'stars');
+  game.starBG2.parentSprite = game.starBG;
+  game.starBG2.fixedToCamera = true;
+  game.starGroup.renderChildren[1].add(game.starBG2);
 
   //Create Level
   game.levelWidth = 0;
@@ -52,6 +59,10 @@ function gameCreate() {
     }
   });
   game.startRoom.activate();
+
+  //Fuel Tank
+  game.shipFuelTank = split.makeSprite(game.startX*game.roomWidth+(game.roomWidth/2) - 116, game.startY*game.roomHeight+(game.roomHeight/2)-76, 'shipGasTank', game.playerGroup);
+  split.centerAnchor(game.shipFuelTank);
 
   //Players
   game.player1 = new Player(game.startX*game.roomWidth+(game.roomWidth/2) - 50, game.startY*game.roomHeight+(game.roomHeight/2)-50, 'player1', game.pad1);
@@ -113,6 +124,8 @@ function gameUpdate() {
   {
       split.tintSprite(game.fuelText, 0xFFFFFF);
       split.tintSprite(game.fuelGoalText, 0xFFFFFF);
+      split.setFrame(game.fuelDivider, 1);
+      split.setFrame(game.shipFuelTank, 1);
 
       if(!game.victory)
       {
@@ -134,6 +147,14 @@ function gameUpdate() {
         }
       }
   }
+  else {
+
+    split.tintSprite(game.fuelText, 0xc400ff);
+    split.tintSprite(game.fuelGoalText, 0xc400ff);
+    split.setFrame(game.fuelDivider, 0);
+    split.setFrame(game.shipFuelTank, 0);
+
+  }
 
   //Check Defeat
   if(game.countDown < 0 && !game.gameOver && !game.victory)
@@ -152,6 +173,20 @@ function gameUpdate() {
     game.state.start('gameOver');
   if(screen1.state.current === 'ship' && screen2.state.current === 'ship')
     game.state.start('ship');
+
+  //Scroll Star Background
+  if(game.starBG1.tilePosition && game.starBG2.tilePosition)
+  {
+    game.starBG1.tilePosition.setTo(screen1.camera.x*-0.5, screen1.camera.y*-0.5);
+    game.starBG2.tilePosition.setTo(screen2.camera.x*-0.5, screen2.camera.y*-0.5);
+  }
+
+  //Sort Player Group
+  if(game.playerGroup.renderChildren[0] && game.playerGroup.renderChildren[1])
+  {
+    game.playerGroup.renderChildren[0].sort('y', Phaser.Group.SORT_ASCENDING);
+    game.playerGroup.renderChildren[1].sort('y', Phaser.Group.SORT_ASCENDING);
+  }
 
 }
 

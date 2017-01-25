@@ -6,14 +6,17 @@ function loadAssets() {
   this.load.spritesheet('bg', 'assets/images/BGSheet.png', 540, 540);
   this.load.image('shipRoom', 'assets/images/shipRoom.png');
   this.load.image('fog', 'assets/images/fow.png');
+  this.load.image('stars', 'assets/images/StarBG.png');
+  this.load.image('starsParallax', 'assets/images/parallaxstars.png');
 
   this.load.image('bullet', 'assets/images/bullet.png');
 
-  this.load.image('enemy', 'assets/images/enemy.png');
   this.load.spritesheet('ghost', 'assets/images/mew.png', 128, 128);
   this.load.spritesheet('spiderbot', 'assets/images/spiderbot.png', 64, 64);
 
   this.load.spritesheet('gas', 'assets/images/gas.png', 64, 64);
+  this.load.spritesheet('shipGasTank', 'assets/images/ShipFuelTank-128x128.png', 128, 128);
+  this.load.spritesheet('smallShip', 'assets/images/SmallShip128x128.png', 128, 128);
 
   this.load.spritesheet('topDoor', 'assets/images/topDoor.png', 128, 128);
   this.load.spritesheet('sideDoor', 'assets/images/sideDoor.png', 128, 128);
@@ -23,7 +26,7 @@ function loadAssets() {
   this.load.image('splashLeft', 'assets/images/SplashScreenLeft.png');
   this.load.image('splashRight', 'assets/images/SplashScreenRight.png');
 
-  this.load.image('divider', 'assets/images/divider.png');
+  this.load.spritesheet('divider', 'assets/images/divider.png', 80, 10);
 
   //Load Audio
   this.load.audio('music', 'assets/audio/Level_Music.ogg');
@@ -31,6 +34,11 @@ function loadAssets() {
   this.load.audio('doorSound', 'assets/audio/door.ogg');
   this.load.audio('victory', 'assets/audio/victory.ogg');
   this.load.audio('failure', 'assets/audio/failure.ogg');
+  this.load.audio('select', 'assets/audio/SelectSound_00.ogg');
+  this.load.audio('fuel', 'assets/audio/FuelCollect_01.ogg');
+  this.load.audio('gunFire', 'assets/audio/Gunfire_00.ogg');
+  this.load.audio('playerStep', 'assets/audio/Player_Footsteps_01.ogg');
+  this.load.audio('spiderbotStep', 'assets/audio/SpiderbotSteps_00.ogg');
 
   //Load Font
   this.load.bitmapFont('font', 'assets/font/font.png', 'assets/font/font.fnt');
@@ -52,6 +60,19 @@ function loadCreate() {
   this.game.state.add('gameOver', gameOverState);
 
   this.ready = false;
+
+  game.sounds = {};
+  game.sounds.music = game.add.audio('music');
+  game.sounds.warning = game.add.audio('warning');
+  game.sounds.door = game.add.audio('doorSound');
+  game.sounds.victory = game.add.audio('victory');
+  game.sounds.failure = game.add.audio('failure');
+  game.sounds.gunFire = game.add.audio('gunFire');
+  game.sounds.fuel = game.add.audio('fuel');
+  game.sounds.playerStep1 = game.add.audio('playerStep');
+  game.sounds.playerStep2 = game.add.audio('playerStep');
+  game.sounds.spiderbotStep = game.add.audio('spiderbotStep');
+  game.sounds.select = game.add.audio('select');
 
 }
 

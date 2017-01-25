@@ -18,10 +18,17 @@ function shipCreate() {
     screen1.camera.flash(0xFFFFFF, 500);
     screen2.camera.flash(0xFFFFFF, 500);
 
+    screen1.victoryBackground = screen1.add.tileSprite(0, 0, 480, 540, 'stars');
+    screen2.victoryBackground = screen2.add.tileSprite(0, 0, 480, 540, 'stars');
+
     game.victoryText = split.makeText(screen1.width/2, 50, 'Victory', 40);
     split.centerAnchor(game.victoryText);
-    // game.finalScoreText = split.makeText(screen1.width/2, 85, 'Level ' + game.level, 24);
-    // split.centerAnchor(game.finalScoreText);
+
+    var smallShip = split.makeSprite(screen1.width/2, screen1.height/2+32, 'smallShip');
+    split.centerAnchor(smallShip);
+    split.addAnimation(smallShip, 'fly', [0, 1, 2], 10, true);
+    split.playAnimation(smallShip, 'fly');
+    game.add.tween(smallShip).to({y: screen1.height/2-32}, 1000, Phaser.Easing.Quadratic.InOut, true, 0, -1, true);
 
     game.p1ShipText = screen1.add.bitmapText(screen1.width/2, 450, 'font', 'Start Level ' + game.level);
     game.p1ShipText.anchor.setTo(0.5, 0.5);
@@ -35,6 +42,15 @@ function shipCreate() {
 }
 
 function shipUpdate() {
+
+  if(screen1.victoryBackground && screen2.victoryBackground)
+  {
+    if(this.game.screenNumber === 1 || this.game.screenNumber === 2)
+    {
+      screen1.victoryBackground.tilePosition.x--;
+      screen2.victoryBackground.tilePosition.x--;
+    }
+  }
 
   if(this.game.screenNumber === 0)
   {
@@ -70,10 +86,38 @@ function shipUpdate() {
 
   }
 
+  else {
+    this.world.forEach(function(element) {
+
+      //Cycle through groups
+      if(element.constructor === Phaser.Group)
+      {
+
+        element.forEach(function(sprite) {
+
+          sprite.x = sprite.parentSprite.x;
+          sprite.y = sprite.parentSprite.y;
+          sprite.scale = sprite.parentSprite.scale;
+
+        });
+      }
+      //Update sprites without groups
+      else {
+        if(element.parentSprite)
+        {
+          element.x = element.parentSprite.x;
+          element.y = element.parentSprite.y;
+          element.scale = element.parentSprite.scale;
+        }
+      }
+
+    });
+  }
+
 }
 
 function startNextLevel() {
-  
+
   screen1.state.start('game');
   screen2.state.start('game');
 

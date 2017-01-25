@@ -145,13 +145,7 @@ Enemy.prototype.stopFlash = function() {
 Enemy.prototype.activate = function() {
 
   this.active = true;
-  if(!this.body)
-    console.log('ethereal ghost');
-  if(this.body)
-  {
-    console.log('solid ghost');
-    this.body.enable = true;
-  }
+  this.body.enable = true;
   game.add.tween(this.renderChildren[0]).to({alpha: 1}, 500, 'Linear', true);
   game.add.tween(this.renderChildren[1]).to({alpha: 1}, 500, 'Linear', true);
 
