@@ -276,3 +276,20 @@ function SpiderBot(x, y, difficulty) {
 
 }
 SpiderBot.prototype = Object.create(Enemy.prototype);
+
+SpiderBot.prototype.update = function() {
+
+  Enemy.prototype.update.call(this);
+
+  if(this.body)
+  {
+    if(this.body.velocity.x > 0 || this.body.velocity.y > 0)
+    {
+      if(!game.sounds.spiderbotStep.isPlaying)
+      {
+        game.sounds.spiderbotStep.play();
+      }
+    }
+  }
+
+};
