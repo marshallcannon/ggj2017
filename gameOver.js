@@ -4,6 +4,10 @@ function gameOverPreload() {
 
 function gameOverCreate() {
 
+  //Reset cameras
+  screen1.camera.shake(0, 1);
+  screen2.camera.shake(0, 1);
+
   if(this.game.screenNumber === 0)
   {
 

@@ -12,7 +12,7 @@ function gameCreateRender() {
   }
   else if(this.game.screenNumber === 2)
   {
-    
+
   }
 
 }

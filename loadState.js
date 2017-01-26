@@ -8,6 +8,7 @@ function loadAssets() {
   this.load.image('fog', 'assets/images/fow.png');
   this.load.image('stars', 'assets/images/StarBG.png');
   this.load.image('starsParallax', 'assets/images/parallaxstars.png');
+  this.load.image('red', 'assets/images/red.png');
 
   this.load.image('bullet', 'assets/images/bullet.png');
 

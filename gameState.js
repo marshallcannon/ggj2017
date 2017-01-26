@@ -15,6 +15,8 @@ function gameCreate() {
   game.fuelAmount = 0;
   game.victory = false;
   game.countDown = game.countDownMax;
+  game.shakeValue = 0;
+  game.redValue = 0;
 
   //Groups
   game.starGroup = split.makeGroup();
@@ -27,6 +29,7 @@ function gameCreate() {
   game.bulletGroup = split.makeGroup();
   game.progressBarGroup = split.makeGroup();
   game.fogGroup = split.makeGroup();
+  game.redGroup = split.makeGroup();
   game.hudGroup = split.makeGroup();
 
   //Play Music
@@ -59,6 +62,11 @@ function gameCreate() {
     }
   });
   game.startRoom.activate();
+
+  //Red Overlay
+  game.redOverlay = split.makeSprite(0, 0, 'red', game.redGroup);
+  split.fixToCamera(game.redOverlay);
+  split.setAlpha(game.redOverlay, 0);
 
   //Fuel Tank
   game.shipFuelTank = split.makeSprite(game.startX*game.roomWidth+(game.roomWidth/2) - 116, game.startY*game.roomHeight+(game.roomHeight/2)-76, 'shipGasTank', game.playerGroup);
@@ -188,6 +196,10 @@ function gameUpdate() {
     game.playerGroup.renderChildren[1].sort('y', Phaser.Group.SORT_ASCENDING);
   }
 
+  //Update Red Overlay
+  game.redOverlay.renderChildren[0].alpha = game.redOverlay.alpha;
+  game.redOverlay.renderChildren[1].alpha = game.redOverlay.alpha;
+
 }
 
 function setBounds(width, height) {
@@ -215,6 +227,8 @@ function tickDown() {
 
   if(game.countDown === 24)
     game.sounds.warning.play();
+  if(game.countDown <= 24)
+    intensify();
 
   game.time.events.add(1000, tickDown, this);
 
@@ -224,5 +238,16 @@ function victory() {
 
   screen1.state.start('ship');
   screen2.state.start('ship');
+
+}
+
+function intensify() {
+
+  game.shakeValue += 0.0005;
+  screen1.camera.shake(game.shakeValue, 1000);
+  screen2.camera.shake(game.shakeValue, 1000);
+
+  game.redValue += 0.02;
+  game.add.tween(game.redOverlay).to({alpha: game.redValue}, 500, Phaser.Easing.Quadratic.InOut, true, 0, 0, true);
 
 }
