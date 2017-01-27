@@ -59,7 +59,7 @@ function shipUpdate() {
   if(this.game.screenNumber === 0)
   {
 
-    if(game.pad1.isDown(Phaser.Gamepad.XBOX360_A))
+    if(game.pad1.isDown(Phaser.Gamepad.XBOX360_A) || game.keyboard1.interact.isDown)
     {
       game.p1ShipText.alpha = 1;
     }
@@ -68,7 +68,7 @@ function shipUpdate() {
       game.p1ShipText.alpha = 0.5;
     }
 
-    if(game.pad2.isDown(Phaser.Gamepad.XBOX360_A))
+    if(game.pad2.isDown(Phaser.Gamepad.XBOX360_A) || game.keyboard2.interact.isDown)
     {
       game.p2ShipText.alpha = 1;
     }

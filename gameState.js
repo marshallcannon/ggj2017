@@ -73,8 +73,8 @@ function gameCreate() {
   split.centerAnchor(game.shipFuelTank);
 
   //Players
-  game.player1 = new Player(game.startX*game.roomWidth+(game.roomWidth/2) - 50, game.startY*game.roomHeight+(game.roomHeight/2)-50, 'player1', game.pad1);
-  game.player2 = new Player(game.startX*game.roomWidth+(game.roomWidth/2) + 50, game.startY*game.roomHeight+(game.roomHeight/2)-50, 'player2', game.pad2);
+  game.player1 = new Player(game.startX*game.roomWidth+(game.roomWidth/2) - 50, game.startY*game.roomHeight+(game.roomHeight/2)-50, 'player1', game.pad1, game.keyboard1);
+  game.player2 = new Player(game.startX*game.roomWidth+(game.roomWidth/2) + 50, game.startY*game.roomHeight+(game.roomHeight/2)-50, 'player2', game.pad2, game.keyboard2);
   setBounds(game.levelWidth*960, game.levelHeight*540);
   startCameras(game.player1, game.player2);
 

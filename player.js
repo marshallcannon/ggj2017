@@ -1,4 +1,4 @@
-function Player(x, y, image, gamepad) {
+function Player(x, y, image, gamepad, keyboard) {
 
   Phaser.Sprite.call(this, game, x, y, image);
   game.playerGroup.add(this);
@@ -18,6 +18,8 @@ function Player(x, y, image, gamepad) {
   this.spawnY = y;
 
   this.controller = gamepad;
+  this.keyboard = keyboard;
+  console.log(this.keyboard);
 
   this.speed = 250;
 
@@ -55,9 +57,20 @@ Player.prototype.update = function() {
   if(!this.collecting)
   {
     //Left Joystick
-    if (xAxisLeft < -0.1 || xAxisLeft > 0.1)
+    if (xAxisLeft < -0.1 || xAxisLeft > 0.1 || this.keyboard.mLeft.isDown || this.keyboard.mRight.isDown)
     {
-      this.body.velocity.x = xAxisLeft*this.speed;
+      if(this.keyboard.mLeft.isDown)
+      {
+        this.body.velocity.x = -this.speed;
+      }
+      else if(this.keyboard.mRight.isDown)
+      {
+        this.body.velocity.x = this.speed;
+      }
+      else
+      {
+        this.body.velocity.x = xAxisLeft*this.speed;
+      }
       split.playAnimation(this, 'run');
       if(this.controller === game.pad1)
       {
@@ -77,9 +90,20 @@ Player.prototype.update = function() {
       this.body.velocity.x = 0;
     }
 
-    if (yAxisLeft < -0.1 || yAxisLeft > 0.1)
+    if (yAxisLeft < -0.1 || yAxisLeft > 0.1 || this.keyboard.mUp.isDown || this.keyboard.mDown.isDown)
     {
-      this.body.velocity.y = yAxisLeft*this.speed;
+      if(this.keyboard.mUp.isDown)
+      {
+        this.body.velocity.y = -this.speed;
+      }
+      else if(this.keyboard.mDown.isDown)
+      {
+        this.body.velocity.y = this.speed;
+      }
+      else
+      {
+        this.body.velocity.y = yAxisLeft*this.speed;
+      }
       split.playAnimation(this, 'run');
       if(this.controller === game.pad1)
       {
@@ -114,17 +138,42 @@ Player.prototype.update = function() {
     }
 
     //Right Joystick
-    if (xAxisRight < -0.1 || xAxisRight > 0.1 || yAxisRight < -0.1 || yAxisRight > 0.1)
+    if (xAxisRight < -0.1 || xAxisRight > 0.1 || yAxisRight < -0.1 || yAxisRight > 0.1 ||
+      this.keyboard.sUp.isDown || this.keyboard.sLeft.isDown || this.keyboard.sDown.isDown || this.keyboard.sRight.isDown)
     {
-      var p1 = {x: this.x, y: this.y};
-      var p2 = {x:this.x+xAxisRight, y: this.y+yAxisRight};
-      //var angle = Math.atan2(p2.y - p1.y, p2.x - p1.x) * 180 / Math.PI;
-      var length = Math.sqrt(xAxisRight*xAxisRight+yAxisRight*yAxisRight);
-      this.bulletDirectionX = xAxisRight/length;
-      this.bulletDirectionY = yAxisRight/length;
+
+      if(this.keyboard.sUp.isDown)
+      {
+        this.bulletDirectionX = 0;
+        this.bulletDirectionY = -1;
+      }
+      else if(this.keyboard.sLeft.isDown)
+      {
+        this.bulletDirectionX = -1;
+        this.bulletDirectionY = 0;
+      }
+      else if(this.keyboard.sDown.isDown)
+      {
+        this.bulletDirectionX = 0;
+        this.bulletDirectionY = 1;
+      }
+      else if(this.keyboard.sRight.isDown)
+      {
+        this.bulletDirectionX = 1;
+        this.bulletDirectionY = 0;
+      }
+      else
+      {
+        var p1 = {x: this.x, y: this.y};
+        var p2 = {x:this.x+xAxisRight, y: this.y+yAxisRight};
+        //var angle = Math.atan2(p2.y - p1.y, p2.x - p1.x) * 180 / Math.PI;
+        var length = Math.sqrt(xAxisRight*xAxisRight+yAxisRight*yAxisRight);
+        this.bulletDirectionX = xAxisRight/length;
+        this.bulletDirectionY = yAxisRight/length;
+      }
 
       //Flip the player
-      if(xAxisRight > 0)
+      if(xAxisRight > 0 || this.keyboard.sRight.isDown)
       {
         this.scale.x = 1;
       }
@@ -134,7 +183,8 @@ Player.prototype.update = function() {
     }
 
     //Shooting
-    if (this.controller.isDown(Phaser.Gamepad.XBOX360_RIGHT_TRIGGER))
+    if (this.controller.isDown(Phaser.Gamepad.XBOX360_RIGHT_TRIGGER) ||
+      this.keyboard.sUp.isDown || this.keyboard.sLeft.isDown || this.keyboard.sDown.isDown || this.keyboard.sRight.isDown)
     {
         if(this.bulletTimer <= 0)
         {
@@ -150,7 +200,7 @@ Player.prototype.update = function() {
   //End Non-collecting Actions
 
   //A Button
-  if(this.controller.isDown(Phaser.Gamepad.XBOX360_A))
+  if(this.controller.isDown(Phaser.Gamepad.XBOX360_A) || this.keyboard.interact.isDown)
   {
     if(this.collecting)
     {
@@ -173,7 +223,7 @@ Player.prototype.update = function() {
     }
   }
 
-  if(this.controller.isDown(Phaser.Gamepad.XBOX360_Y))
+  if(this.controller.isDown(Phaser.Gamepad.XBOX360_Y) || game.resetKey.isDown)
   {
     game.sounds.music.stop();
     screen1.state.start('game');
